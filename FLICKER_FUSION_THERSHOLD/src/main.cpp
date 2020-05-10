@@ -64,14 +64,7 @@ void loop()
        timer= millis();           
     }  
     
-    // coding for plotting frequency only  when the button is pressed
-    display_time = millis();
-    if(!digitalRead(button_pin)&& (display_time - display_previoustime)>= (100*debounceTime))
-    {  
-       Serial.print(SetFrequency);
-       display_previoustime = display_time;
-    }
-         
+    
 }
 
 
