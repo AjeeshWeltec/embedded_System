@@ -34,7 +34,7 @@ static const unsigned char PROGMEM logo_bmp[] =
   B01111100, B11110000,
   B01110000, B01110000,
   B00000000, B00110000 };
-
+ void testwelcometext(void);
   void setup() {
   Serial.begin(115200);
 if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
