@@ -1,7 +1,7 @@
 /*
 |AJEESH CHANDRAN|
 |STUDENT ID :-2192556|
-|MG7013|EMBEDDED SYSTEM ASSIGNMENT:- LOGICAL ANALYSER CORONA VERSION|
+|MG7013|EMBEDDED SYSTEM ASSIGNMENT:- LOGIC ANALYSER CORONA VERSION|
 */
 #include <Arduino.h>
 #include <SPI.h>
@@ -73,7 +73,8 @@ void loop(){
     ModeSelection();
     display.clearDisplay();    
   }
-  if((Button_2Press == 1) and (Button_1Press == 1)){ //loop function for mapping voltage across time
+  //loop function for mapping voltage across time
+  if((Button_2Press == 1) and (Button_1Press == 1)){ 
     static uint8_t x_Graph = 120;
     display.drawFastVLine(0,0, SCREEN_HEIGHT , WHITE);
     display.drawFastHLine(0,63, SCREEN_WIDTH , WHITE);
@@ -91,9 +92,97 @@ void loop(){
        display.clearDisplay();
        }
     }
-}
+    //menu back to mode selection
+    if(Button_2Press == 2){ 
+      Button_1Press = 0;
+      Serial.println(Button_2Press);
+    }
+    //loop for sine waveform
+   if(Button_2Press == 3 and Button_1Press == 1){ 
+    static uint8_t x_Graph = 0;
+    display.drawFastVLine(0,0, SCREEN_HEIGHT , WHITE);
+    display.drawFastHLine(0,63, SCREEN_WIDTH , WHITE);
+    uint32_t Sine_wave = sin((double)DAC_Input/10)* 127 + 127;
+    analogWrite(DACpin, Sine_wave);
+    uint32_t ADC_Out = analogRead(ADCpin);
+    float Analog_Voltage = (float)map(ADC_Out, 0, 255, 0, 1000)/1000.0;
+    Serial.println(Analog_Voltage);
+    Serial.flush();
+    float y_Graph = (float)map(Analog_Voltage, 0, 1, 63, 30);
+    display.setCursor(0,63);
+    display.setTextSize(1);
+    display.drawPixel(x_Graph , y_Graph, WHITE);
+    x_Graph++;
+    if(x_Graph > 120){
+       x_Graph = 0;
+       display.clearDisplay();
+      }
+   }
+   // mode selection screen
+   if(Button_2Press == 4){ 
+    Button_1Press = 0;
+   }
+   //loop for sqaure waveform
+   if(Button_2Press == 5 and Button_1Press == 1){ 
+    static uint8_t Square_Input = 0; 
+    static uint8_t x_Graph = 0;
+    static float y_Graph = 0;
+    display.drawFastVLine(0,0, SCREEN_HEIGHT , WHITE);
+    display.drawFastHLine(0,63, SCREEN_WIDTH , WHITE);
+    if( 0 <= DAC_Input< 127){
+      Square_Input = 0;
+    }
+    if(127<= DAC_Input){
+      Square_Input = 255;
+    }
+    //Serial.println(Square_Input);
+    analogWrite(DACpin, Square_Input);
+    uint32_t ADC_Out = analogRead(ADCpin);
+    float Analog_Voltage = (float)map(ADC_Out, 0, 255, 0, 1000)/1000.0;
+    //Serial.println(Analog_Voltage);
+    Serial.flush();
+    if(Analog_Voltage < 0.5){
+     y_Graph = 63;
+    }
+    if(Analog_Voltage >= 0.5 ){
+      y_Graph = 40; 
+    }
+    display.setCursor(0,63);
+    display.setTextSize(1);
+    display.drawPixel(x_Graph , y_Graph, WHITE);
+    x_Graph++;
+    if(x_Graph > 120){
+       x_Graph = 0;
+       display.clearDisplay();
+      }
+   }
+   //mode selection window displays
+   if(Button_2Press == 6){ 
+    Button_1Press = 0;
+   }
+   //loop fumction for logic analyser
+   if(Button_2Press == 7 and Button_1Press == 1){ 
 
-void HomeScreen() { //function for homescreen
+    display.clearDisplay();
+    Serial.println(" Bit pattern is: ");
+    Serial.println(DAC.i, BIN);
+    display.setCursor(0,40);
+    display.println(DAC.i,BIN);
+    display.setTextSize(1);
+    display.display();
+   }
+   if(Button_2Press > 7){
+    Button_1Press=0;
+    Button_2Press=1;
+   }
+   display.display();
+    DAC_Input ++; 
+    Serial.print(Button_2Press);
+    Serial.print(" , ");
+    Serial.println(Button_1Press);
+ }
+//function for homescreen
+void HomeScreen() { 
  display.clearDisplay();
  display.setTextSize(2); // Draw 2X-scale text
  display.setTextColor(WHITE);
@@ -107,8 +196,8 @@ void HomeScreen() { //function for homescreen
  display.display();
 
 }
-
-void ModeSelection(){ //function for mode selection screen
+//function for mode selection screen
+void ModeSelection(){ 
  display.setTextSize(1.5);
  display.setTextColor(WHITE);
  display.setCursor(5,15);
@@ -131,7 +220,8 @@ void ModeSelection(){ //function for mode selection screen
  display.println("> LOGIC ANALYSER"); 
  display.display();
 }
-void Button_1(){ //debounce delay for button_1
+//functtion - debounce delay for button_1
+void Button_1(){ 
   static uint32_t Button_1Previoustime = 0;
    Button_1Previouscount = Button_1Press;
    if((millis() - Button_1Previoustime)>= DebounceTime){
@@ -143,8 +233,8 @@ void Button_1(){ //debounce delay for button_1
    }
    Button_1Currentcount = Button_1Press;
 }
-
-void Button_2(){ // debounce delay for button_2
+// function - debounce delay for button_2
+void Button_2(){ 
   static uint32_t Button_2Previoustime = 0;
    Button_2Previouscount = Button_2Press;
    if((millis()- Button_2Previoustime)>= DebounceTime){
