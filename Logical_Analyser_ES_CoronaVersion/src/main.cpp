@@ -85,7 +85,7 @@ void loop(){
     display.setTextSize(1);
     display.drawPixel(x_Graph , y_Graph, WHITE);
     x_Graph++;
-    Serial.println(10*voltage);//amplifying voltage 10 times to see the varation in serial plot
+    Serial.println(voltage);
         
     if(x_Graph > 120){
        x_Graph = 0;
@@ -106,7 +106,7 @@ void loop(){
     analogWrite(DACpin, Sine_wave);
     uint32_t ADC_Out = analogRead(ADCpin);
     float Analog_Voltage = (float)map(ADC_Out, 0, 255, 0, 1000)/1000.0;
-    Serial.println(10*Analog_Voltage);//amplifying analog voltage 10 times to see the varation in serial plot
+    Serial.println(Analog_Voltage);
     Serial.flush();
     float y_Graph = (float)map(Analog_Voltage, 0, 1, 63, 30);
     display.setCursor(0,63);
@@ -129,7 +129,7 @@ void loop(){
     static float y_Graph = 0;
     display.drawFastVLine(0,0, SCREEN_HEIGHT , WHITE);
     display.drawFastHLine(0,63, SCREEN_WIDTH , WHITE);
-    if( 0 <= DAC_Input< 127){
+    if( 0 <= DAC_Input < 127){
       Square_Input = 0;
     }
     if(127<= DAC_Input){
@@ -139,7 +139,7 @@ void loop(){
     analogWrite(DACpin, Square_Input);
     uint32_t ADC_Out = analogRead(ADCpin);
     float Analog_Voltage = (float)map(ADC_Out, 0, 255, 0, 1000)/1000.0;
-    Serial.println(10*Analog_Voltage); //amplifying analog voltage 10 times to see the varation in serial plot
+    Serial.println(Analog_Voltage); 
     Serial.flush();
     if(Analog_Voltage < 0.5){
      y_Graph = 63;
