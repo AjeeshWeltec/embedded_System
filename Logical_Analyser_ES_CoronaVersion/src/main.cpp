@@ -85,7 +85,7 @@ void loop(){
     display.setTextSize(1);
     display.drawPixel(x_Graph , y_Graph, WHITE);
     x_Graph++;
-    Serial.println(voltage);
+    Serial.println(10*voltage);//amplifying voltage 10 times to see the varation in serial plot
         
     if(x_Graph > 120){
        x_Graph = 0;
@@ -95,7 +95,7 @@ void loop(){
     //menu back to mode selection
     if(Button_2Press == 2){ 
       Button_1Press = 0;
-      Serial.println(Button_2Press);
+      
     }
     //loop for sine waveform
    if(Button_2Press == 3 and Button_1Press == 1){ 
@@ -106,7 +106,7 @@ void loop(){
     analogWrite(DACpin, Sine_wave);
     uint32_t ADC_Out = analogRead(ADCpin);
     float Analog_Voltage = (float)map(ADC_Out, 0, 255, 0, 1000)/1000.0;
-    Serial.println(Analog_Voltage);
+    Serial.println(10*Analog_Voltage);//amplifying analog voltage 10 times to see the varation in serial plot
     Serial.flush();
     float y_Graph = (float)map(Analog_Voltage, 0, 1, 63, 30);
     display.setCursor(0,63);
@@ -139,7 +139,7 @@ void loop(){
     analogWrite(DACpin, Square_Input);
     uint32_t ADC_Out = analogRead(ADCpin);
     float Analog_Voltage = (float)map(ADC_Out, 0, 255, 0, 1000)/1000.0;
-    //Serial.println(Analog_Voltage);
+    Serial.println(10*Analog_Voltage); //amplifying analog voltage 10 times to see the varation in serial plot
     Serial.flush();
     if(Analog_Voltage < 0.5){
      y_Graph = 63;
@@ -177,9 +177,7 @@ void loop(){
    }
    display.display();
     DAC_Input ++; 
-    Serial.print(Button_2Press);
-    Serial.print(" , ");
-    Serial.println(Button_1Press);
+    
  }
 //function for homescreen
 void HomeScreen() { 
