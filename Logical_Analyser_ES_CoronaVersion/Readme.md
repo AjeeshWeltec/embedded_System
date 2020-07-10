@@ -74,6 +74,22 @@ Working
 - Back to Mode selection screen from each state is carried out on Button\_2 press.
 - Generally mode selection assigned to Button\_2 and Action is carried out by Button\_1.
 
+Circuit Design 
+	Both button are directly connected to the Teensy pin without a resistor , this is achieved by activating the ‘INPUT_PULLUP’ command in the coding when calling button pins, this activates the internal pull up resistor of the Teensy.
+	The I2C is an open drain interface standard that requires a pull up resistor to pull up the signal to a high state. OLED communicates via I2C protocol, and  has inbuilt pull-up resistor. That is the reason why we are not using external resistor.
+	Calculating Internal Pull-up resistor for OLED  
+ >From I2C specification
+ tr (rise time of SDA & SCL signal) for fast mode=300ns(OLED is fast mode)
+ VOL max (Low-level output voltage at 3mA current sink, VCC>2V)=0.4V
+ Cb capacitive load of each bus line = 400pF
+
+Thus from equation for Pull up resistor RP 
+    RP(min)=(Vcc-VoL(max))/IoL=(3.3-0.4)/0.0003=9.6KΩ
+    RP(max)=tr/(0.8473*Cb)=(300*10^(-9))/(0.8473*10^(-12) ) =885.16Ω
+
+Thus value of RP of OLED is between 885.16 Ω and 9.6KΩ
+
+
 **DISCUSSON &amp; LIMITATIONS**
 
 Limitations of my design are
@@ -96,3 +112,6 @@ The output required for the task was obtained successfully with
 - Burgess, P. (n.d.). Adafruit GFX Graphics Library. Retrieved July 09, 2020, from[https://learn.adafruit.com/adafruit-gfx-graphics-library/coordinate-system-and-units](https://learn.adafruit.com/adafruit-gfx-graphics-library/coordinate-system-and-units)
 - Tripoli, S., Santos, R., John, Marin, C., Bello, S., Gorki, . . . E., E. (2019, September 08). Guide for I2C OLED Display with Arduino. Retrieved July 09, 2020, from [https://randomnerdtutorials.com/guide-for-oled-display-with-arduino/](https://randomnerdtutorials.com/guide-for-oled-display-with-arduino/)
 - Https://moodle.weltec.ac.nz/pluginfile.php/639617/mod\_resource/content/0/Ass2\_Logic\_Analyser\_ES\_CoronaVersion.pdf. (n.d.). Retrieved July 5,2020,from[https://moodle.weltec.ac.nz/pluginfile.php/639617/mod\_resource/content/0/Ass2\_Logic\_Analyser\_ES\_CoronaVersion.pdf](https://moodle.weltec.ac.nz/pluginfile.php/639617/mod_resource/content/0/Ass2_Logic_Analyser_ES_CoronaVersion.pdf)
+- Tutorial Internal pull up resistor calculation. (n.d.). Retrieved July A0, 2020, from  https://www.youtube.com/watch?v=sGZe0aJsqBQ 
+
+DATASHEET:-All referred datasheets are attached in the datasheet folder
