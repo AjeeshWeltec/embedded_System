@@ -2,6 +2,12 @@
 |AJEESH CHANDRAN|
 |STUDENT ID :-2192556|
 |MG7013|EMBEDDED SYSTEM ASSIGNMENT:- LOGIC ANALYSER CORONA VERSION|
+|''implemenation of teensy microcontroller board as system showing
+ 1.One channel oscilloscope
+ 2.Function generator with sine and square wave
+ 3.Logic analyser
+ output is obtained in an OLED and serial plot simulatneously
+ -system acts a finite state machine''|
 */
 #include <Arduino.h>
 #include <SPI.h>
@@ -12,7 +18,7 @@
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT,& Wire);
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -41,6 +47,7 @@ void Button_2(); //function for calculating debounce delay of button_2
 void HomeScreen(); //function for initial display
 void ModeSelection(); //selection screen 
 void oscilloscope(); //function for oscilloscope- waveform forvoltage vs time
+void Bitpattern();
 
 
 void setup() 
